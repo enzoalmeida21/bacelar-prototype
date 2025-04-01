@@ -1,38 +1,1258 @@
-.App {
-  text-align: center;
+/* style.css - Refinado Alto Padrão COM TEMAS DARK/LIGHT e ESTILOS CaseListScreen */
+
+/* === Variáveis GERAIS (Comuns a ambos os temas) === */
+:root {
+  --navbar-height: 58px;
+  --sidebar-width: 250px;
+  --transition-base: all 0.25s ease-in-out;
+  --font-family-base: 'Playfair Display', Georgia, serif;
+  --font-family-headings: 'Playfair Display', Georgia, serif;
+  --font-family-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --card-border-radius: 6px;
+  --primary-accent: #6a8db1; /* Azul acinzentado premium */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* === TEMA CLARO (Padrão) === */
+body.light-theme {
+  --body-bg: #f8f9fa;
+  --text-color: #2b3035;
+  --muted-text: #6c757d;
+  --border-color: #e9ecef;
+  --card-bg: #ffffff;
+  --card-header-bg: #f8f9fa;
+  --card-shadow: 0 6px 18px rgba(43, 48, 53, 0.06);
+  --card-shadow-hover: 0 10px 30px rgba(43, 48, 53, 0.1);
+  --link-color: var(--primary-accent);
+  --link-hover-color: #55799c;
+  --table-header-color: #495057;
+  --table-header-bg: #f1f3f5; /* Cabeçalho mais visível */
+  --table-hover-bg: #f8f9fa;
+  --table-striped-bg: #f8f9fa;
+
+  /* Bootstrap overrides para Light */
+  --bs-body-color: var(--text-color);
+  --bs-body-bg: var(--body-bg);
+  --bs-secondary-bg: #f1f3f5;
+  --bs-tertiary-bg: #e9ecef;
+  --bs-border-color: var(--border-color);
+  --bs-list-group-color: var(--text-color);
+  --bs-list-group-bg: var(--card-bg);
+  --bs-list-group-border-color: var(--border-color);
+  --bs-list-group-action-hover-bg: var(--table-hover-bg);
+  --bs-form-select-bg: var(--card-bg);
+  --bs-form-select-color: var(--text-color);
+  --bs-form-select-border-color: var(--border-color);
+  --bs-light-rgb: 248, 249, 250;
+  --bs-dark-rgb: 33, 37, 41;
+  --bs-table-color: var(--text-color);
+  --bs-table-bg: var(--card-bg);
+  --bs-table-border-color: var(--border-color);
+  --bs-table-striped-color: var(--text-color);
+  --bs-table-striped-bg: var(--table-striped-bg);
+  --bs-table-hover-color: var(--text-color);
+  --bs-table-hover-bg: var(--table-hover-bg);
+  --bs-secondary-color: var(--muted-text);
+  --bs-emphasis-color: #000; /* Ênfase em tema claro */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* === TEMA ESCURO (Grafite) === */
+body.dark-theme {
+  --body-bg: #121418;
+  --text-color: rgba(255, 255, 255, 0.9);
+  --muted-text: rgba(255, 255, 255, 0.65);
+  --border-color: #40454c;
+  --card-bg: #1e2228;
+  --card-header-bg: #262a30;
+  --card-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  --card-shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --link-color: #8aa8c9;
+  --link-hover-color: #a8c1db;
+  --table-header-color: rgba(255, 255, 255, 0.9);
+  --table-header-bg: #262a30; /* Cabeçalho da tabela escuro */
+  --table-hover-bg: rgba(255, 255, 255, 0.08);
+  --table-striped-bg: rgba(255, 255, 255, 0.04);
+
+  /* Bootstrap overrides para Dark */
+  --bs-body-color: var(--text-color);
+  --bs-body-bg: var(--body-bg);
+  --bs-secondary-bg: #262a30;
+  --bs-tertiary-bg: #2a2e34;
+  --bs-border-color: var(--border-color);
+  --bs-list-group-color: var(--text-color);
+  --bs-list-group-bg: var(--card-bg);
+  --bs-list-group-border-color: var(--border-color);
+  --bs-list-group-action-hover-bg: rgba(255, 255, 255, 0.04);
+  --bs-form-select-bg: var(--card-bg);
+  --bs-form-select-color: var(--text-color);
+  --bs-form-select-border-color: var(--border-color);
+  --bs-light-rgb: 248, 249, 250;
+  --bs-dark-rgb: 33, 37, 41;
+  --bs-table-color: var(--text-color);
+  --bs-table-bg: var(--card-bg); /* Fundo base da tabela */
+  --bs-table-border-color: var(--border-color);
+  --bs-table-striped-color: var(--text-color);
+  --bs-table-striped-bg: var(--table-striped-bg);
+  --bs-table-hover-color: var(--text-color);
+  --bs-table-hover-bg: var(--table-hover-bg);   /* Hover sutil escuro */
+  --bs-secondary-color: rgba(255, 255, 255, .75);
+  --bs-emphasis-color: #fff;
+  --bs-secondary-border-subtle: #495057; /* Exemplo para botões outline */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+
+/* === Estilos Globais (Agora usando vars) === */
+body {
+  padding-top: var(--navbar-height);
+  background-color: var(--body-bg);
+  font-family: var(--font-family-ui); /* Interface usa fonte mais legível */
+  color: var(--text-color);
+  overflow-x: hidden;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+/* Avaliação da Fonte para um Sistema Jurídico
+
+Analisando o seu projeto para o sistema Bacelar, que é voltado para o ramo jurídico, a fonte Playfair Display que você está utilizando é uma excelente escolha. Vamos avaliar:
+
+## Pontos Fortes da Playfair Display para um Sistema Jurídico
+
+1. **Elegância e Seriedade**: A Playfair Display tem características clássicas que transmitem autoridade e tradição, valores importantes para escritórios de advocacia.
+
+2. **Legibilidade com Sofisticação**: Ela mantém um bom equilíbrio entre ser decorativa e legível, o que é crucial para um sistema que precisa apresentar informações jurídicas complexas.
+
+3. **Aplicação Seletiva**: Você implementou corretamente ao aplicá-la em elementos de destaque (títulos, cabeçalhos) enquanto mantém fontes mais neutras para o texto principal.
+
+## Sugestões de Refinamento
+
+Se quiser considerar alternativas ou refinamentos, poderia avaliar:
+
+1. **Cormorant Garamond**: Uma fonte ainda mais clássica, com raízes na tipografia jurídica tradicional.
+
+2. **Libre Baskerville**: Ligeiramente mais formal e com melhor legibilidade em tamanhos menores.
+
+3. **Combinação Híbrida**: Manter Playfair Display para títulos principais, mas usar uma fonte serif mais discreta como Baskerville ou Garamond para subtítulos.
+
+## Implementação Atual
+```css
+/* === Variáveis GERAIS (Comuns a ambos os temas) === */
+:root {
+  --navbar-height: 58px;
+  --sidebar-width: 250px;
+  --transition-base: all 0.25s ease-in-out;
+  --font-family-base: 'Playfair Display', Georgia, serif;
+  --font-family-headings: 'Playfair Display', Georgia, serif;
+  --font-family-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --card-border-radius: 6px;
+  --primary-accent: #6a8db1; /* Azul acinzentado premium */
+}
+
+/* === TEMA CLARO (Padrão) === */
+body.light-theme {
+  --body-bg: #fbfbfc;
+  --text-color: #2b3035;
+  --muted-text: #6c757d;
+  --border-color: #e9ecef;
+  --card-bg: #ffffff;
+  --card-header-bg: transparent;
+  --card-shadow: 0 6px 18px rgba(43, 48, 53, 0.06);
+  --card-shadow-hover: 0 10px 30px rgba(43, 48, 53, 0.1);
+  --link-color: var(--primary-accent);
+  --link-hover-color: #55799c;
+  --table-header-color: var(--muted-text);
+  --table-header-bg: transparent; /* Cabeçalho claro */
+  --table-hover-bg: #f8f9fa;
+  --table-striped-bg: #f8f9fa;
+
+  /* Bootstrap overrides para Light */
+  --bs-body-color: var(--text-color);
+  --bs-body-bg: var(--body-bg);
+  --bs-secondary-bg: #f8f9fa;
+  --bs-tertiary-bg: #e9ecef;
+  --bs-border-color: var(--border-color);
+  --bs-list-group-color: var(--text-color);
+  --bs-list-group-bg: var(--card-bg);
+  --bs-list-group-border-color: var(--border-color);
+  --bs-list-group-action-hover-bg: var(--table-hover-bg);
+  --bs-form-select-bg: var(--card-bg);
+  --bs-form-select-color: var(--text-color);
+  --bs-form-select-border-color: var(--border-color);
+  --bs-light-rgb: 248, 249, 250;
+  --bs-dark-rgb: 33, 37, 41;
+  --bs-table-color: var(--text-color);
+  --bs-table-bg: var(--card-bg);
+  --bs-table-border-color: var(--border-color);
+  --bs-table-striped-color: var(--text-color);
+  --bs-table-striped-bg: var(--table-striped-bg);
+  --bs-table-hover-color: var(--text-color);
+  --bs-table-hover-bg: var(--table-hover-bg);
+  --bs-secondary-color: var(--muted-text);
+  --bs-emphasis-color: #000; /* Ênfase em tema claro */
+}
+
+/* === TEMA ESCURO (Grafite) === */
+body.dark-theme {
+  --body-bg: #1c1e22;
+  --text-color: rgba(255, 255, 255, 0.85);
+  --muted-text: rgba(255, 255, 255, 0.55);
+  --border-color: #40454c;
+  --card-bg: #2a2e34;
+  --card-header-bg: transparent;
+  --card-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  --card-shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --link-color: var(--primary-accent);
+  --link-hover-color: #8aa8c9;
+  --table-header-color: var(--muted-text);
+  --table-header-bg: #1f2326; /* Cabeçalho da tabela escuro */
+  --table-hover-bg: rgba(255, 255, 255, 0.05);
+  --table-striped-bg: rgba(255, 255, 255, 0.03);
+
+  /* Bootstrap overrides para Dark */
+  --bs-body-color: var(--text-color);
+  --bs-body-bg: var(--body-bg);
+  --bs-secondary-bg: #343a40;
+  --bs-tertiary-bg: var(--card-bg);
+  --bs-border-color: var(--border-color);
+  --bs-list-group-color: var(--text-color);
+  --bs-list-group-bg: var(--card-bg);
+  --bs-list-group-border-color: var(--border-color);
+  --bs-list-group-action-hover-bg: rgba(255, 255, 255, 0.04);
+  --bs-form-select-bg: var(--card-bg);
+  --bs-form-select-color: var(--text-color);
+  --bs-form-select-border-color: var(--border-color);
+  --bs-light-rgb: 248, 249, 250;
+  --bs-dark-rgb: 33, 37, 41;
+  --bs-table-color: var(--text-color);
+  --bs-table-bg: var(--card-bg); /* Fundo base da tabela */
+  --bs-table-border-color: var(--border-color);
+  --bs-table-striped-color: var(--text-color);
+  --bs-table-striped-bg: var(--table-striped-bg); /* Zebra sutil escura */
+  --bs-table-hover-color: var(--text-color);
+  --bs-table-hover-bg: var(--table-hover-bg);   /* Hover sutil escuro */
+  --bs-secondary-color: rgba(255, 255, 255, .75);
+  --bs-emphasis-color: #fff;
+  --bs-secondary-border-subtle: #495057; /* Exemplo para botões outline */
+}
+
+
+/* === Estilos Globais (Agora usando vars) === */
+body {
+  padding-top: var(--navbar-height);
+  background-color: var(--body-bg);
+  font-family: var(--font-family-ui); /* Interface usa fonte mais legível */
+  color: var(--text-color);
+  overflow-x: hidden;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+/* Aplicar fonte luxuosa em títulos e elementos destacados */
+h1, h2, h3, h4, h5, h6,
+.navbar-brand,
+.card-header,
+.snapshot-card .snapshot-title,
+.snapshot-card .snapshot-value {
+  font-family: var(--font-family-headings);
+}
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--link-hover-color);
+}
+
+
+/* === Navbar Superior === */
+.navbar {
+  --navbar-bg: #1f2326; /* Cor navbar independe do tema */
+  --dark-border: #44484d;
+  --light-text: rgba(255, 255, 255, 0.7);
+  --white: #ffffff;
+  --hover-bg: rgba(255, 255, 255, 0.08);
+
+  height: var(--navbar-height);
+  background-color: var(--navbar-bg) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+}
+.navbar-brand { font-weight: 600; letter-spacing: 0.5px; }
+.navbar .form-control { background-color: rgba(255, 255, 255, 0.05) !important; border-color: var(--dark-border) !important; color: var(--white) !important; }
+.navbar .form-control::placeholder { color: rgba(255, 255, 255, 0.4); }
+.navbar .dropdown-menu { background-color: var(--navbar-bg); border: 1px solid var(--dark-border); }
+.navbar .dropdown-item { color: var(--light-text); }
+.navbar .dropdown-item:hover, .navbar .dropdown-item:focus { color: var(--white); background-color: var(--hover-bg); }
+.navbar .dropdown-divider { border-top-color: var(--dark-border); }
+.navbar .btn-outline-secondary { color: var(--light-text); border-color: var(--dark-border) !important; }
+.navbar .btn-outline-secondary:hover { color: var(--white); background-color: var(--hover-bg);}
+
+
+/* === Sidebar Lateral === */
+.sidebar {
+   /* Cores internas da sidebar (mantidas) */
+  --sidebar-bg: #16181a;
+  --sidebar-text: rgba(255, 255, 255, 0.65);
+  --sidebar-text-hover: rgba(255, 255, 255, 0.9);
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.05);
+  --sidebar-active-border: #6a8db1;
+  --heading-color: rgba(255, 255, 255, .4);
+
+  width: var(--sidebar-width);
+  background-color: var(--sidebar-bg);
+  padding-top: var(--navbar-height);
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  position: fixed; top: 0; bottom: 0; left: 0; z-index: 100;
+  transition: width 0.3s ease-in-out;
+}
+.sidebar-sticky { position: sticky; top: 0; height: calc(100vh - var(--navbar-height)); padding-top: 2rem; overflow-x: hidden; overflow-y: auto; }
+.sidebar .nav-link { font-weight: 400; color: var(--sidebar-text); padding: 0.9rem 1.75rem; border-left: 4px solid transparent; display: flex; align-items: center; white-space: nowrap; transition: var(--transition-base); }
+.sidebar .nav-link .bi { margin-right: 15px; font-size: 1.1rem; min-width: 20px; text-align: center; line-height: 1; }
+.sidebar .nav-link:hover { color: var(--sidebar-text-hover); background-color: var(--sidebar-hover-bg); }
+.sidebar .nav-link.active { color: var(--white); background-color: var(--sidebar-hover-bg); font-weight: 600; border-left-color: var(--sidebar-active-border); }
+.sidebar-heading { font-size: .7rem; color: var(--heading-color); padding: 0.75rem 1.75rem; letter-spacing: 1px; text-transform: uppercase; }
+
+/* === Conteúdo Principal === */
+.main-content {
+   padding: 2rem 3rem;
+   height: calc(100vh - var(--navbar-height)); overflow-y: auto;
+   margin-left: var(--sidebar-width);
+   transition: margin-left 0.3s ease-in-out, background-color var(--transition-base), color var(--transition-base);
+}
+@media (max-width: 991.98px) {
+    .sidebar { position: static; width: 100%; height: auto; box-shadow: none; padding-top: 0;}
+    .main-content { margin-left: 0; height: auto; padding: 1.5rem; }
+    .sidebar-sticky { position: relative; height: auto; padding-top: 1rem; }
+}
+.main-content .border-bottom { border-color: var(--border-color) !important; padding-bottom: 1rem !important; margin-bottom: 2rem !important; transition: border-color var(--transition-base); }
+.main-content h1.h2 { font-weight: 300; color: var(--text-color); transition: color var(--transition-base);}
+
+
+/* === Cards Gerais === */
+.card {
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 2rem;
+    background-color: var(--card-bg);
+    transition: var(--transition-base);
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--card-shadow-hover); }
+.card-header {
+    background-color: var(--card-header-bg);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600; padding: 1rem 1.5rem; display: flex; align-items: center;
+    transition: var(--transition-base);
+}
+.card-header .bi { margin-right: 0.6rem; font-size: 1.05rem; color: var(--muted-text); transition: color var(--transition-base); }
+.card-body { padding: 1.75rem; transition: var(--transition-base);}
+
+
+/* Snapshot Cards - Centralização e Estilo */
+.snapshot-card { border-radius: 8px; }
+.snapshot-card .card-body { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem 1rem; min-height: 130px; }
+.snapshot-card .snapshot-content { width: 100%; }
+.snapshot-card .snapshot-icon { font-size: 1.8rem; opacity: 0.7; margin-bottom: 0.75rem !important; transition: opacity var(--transition-base);}
+.snapshot-card .snapshot-title { font-size: 0.85rem; font-weight: 400; color: inherit; opacity: 0.9; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.snapshot-card .snapshot-value { font-size: 1.9rem; font-weight: 700; color: inherit; margin-bottom: 0; line-height: 1.2; }
+.snapshot-card .snapshot-footer { background-color: rgba(0,0,0,0.04); border-top: 1px solid rgba(0,0,0,0.08); font-size: 0.8em; padding: 0.6rem 1rem; text-align: center; display: flex; justify-content: space-between; align-items: center;}
+.snapshot-card .snapshot-footer { background-color: rgba(255,255,255,0.04); border-top-color: rgba(255,255,255,.08);}
+.snapshot-card .snapshot-footer { background-color: rgba(255,255,255,0.04); border-top-color: rgba(255,255,255,.08);}
+body.dark-theme .snapshot-card .snapshot-footer { background-color: rgba(255,255,255,0.04); border-top-color: rgba(255,255,255,.08);}
+body.dark-theme .card.text-dark .snapshot-footer a { color: rgba(0, 0, 0, 0.8) !important;}
+
+/* === Widget de Imperativos (Adaptação tema) === */
+.widget-imperatives .list-group-item { border: none; padding: 1rem 1.5rem; background-color: var(--card-bg); }
+.widget-imperatives .list-group-item a { color: var(--text-color); text-decoration: none; display: block; transition: background-color var(--transition-base); margin: -1rem -1.5rem; padding: 1rem 1.5rem; }
+.widget-imperatives .list-group-item a:hover { background-color: var(--bs-secondary-bg); }
+body.dark-theme .widget-imperatives .list-group-item a .text-danger { color: #ff7b87 !important; }
+body.dark-theme .widget-imperatives .list-group-item a .text-warning { color: #ffd166 !important; }
+body.dark-theme .widget-imperatives .list-group-item a { color: var(--text-color); }
+
+
+/* === Placeholders === */
+.placeholder-content, .placeholder-graph, .placeholder-list, .placeholder-table {
+    border: 1px dashed var(--border-color); background-color: transparent; min-height: 150px;
+    font-size: 0.95rem; opacity: 0.7; padding: 3rem 1rem;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; font-style: italic; color: var(--muted-text);
+    transition: var(--transition-base);
+}
+.placeholder-graph { min-height: 300px; } .placeholder-table { min-height: 250px; }
+
+/* === Tabs === */
+.nav-tabs { border-bottom-color: var(--border-color); transition: border-color var(--transition-base);}
+.nav-tabs .nav-link { padding: 1rem 1.5rem; color: var(--muted-text); border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; transition: var(--transition-base); background: transparent;}
+.nav-tabs .nav-link:hover { border-color: var(--border-color) var(--border-color) transparent; background-color: var(--bs-secondary-bg); color: var(--text-color); }
+.nav-tabs .nav-link.active { color: var(--primary-accent); background-color: var(--card-bg); border-color: var(--border-color) var(--border-color) var(--card-bg); font-weight: 700; border-bottom: none;}
+.tab-content { padding: 2.5rem; border: 1px solid var(--border-color); border-top: none; background-color: var(--card-bg); border-bottom-left-radius: var(--card-border-radius); border-bottom-right-radius: var(--card-border-radius); transition: var(--transition-base);}
+
+
+/* === NOVOS ESTILOS TELA LISTA DE CASOS === */
+
+.case-list-card {
+  margin-bottom: 0;
+  border: none;
+  box-shadow: none;
+  background-color: transparent; /* Card pai é transparente */
+}
+
+.case-list-toolbar {
+  padding: 0.9rem 1.5rem;
+  background-color: var(--card-bg); /* Toolbar tem fundo */
+  border-bottom: 1px solid var(--border-color);
+  border-top-left-radius: var(--card-border-radius);
+  border-top-right-radius: var(--card-border-radius);
+}
+.filter-quick-buttons .btn { /* Estilo para os botões de filtro rápido */
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.35rem 0.8rem;
+  border-width: 1px;
+}
+.filter-actions select,
+.filter-actions button { /* Ajusta alinhamento */
+   vertical-align: middle;
+}
+/* Adaptações Dark para a toolbar da lista */
+body.dark-theme .case-list-toolbar {
+    background-color: var(--bs-secondary-bg); /* Toolbar um pouco diferente no dark */
+    border-bottom-color: var(--border-color);
+}
+/* Adapta botões de filtro rapido outline pro dark theme */
+body.dark-theme .filter-quick-buttons .btn {
+  --bs-btn-color: var(--muted-text);
+  --bs-btn-border-color: var(--border-color);
+  --bs-btn-hover-color: var(--text-color);
+  --bs-btn-hover-bg: var(--bs-tertiary-bg); /* Fundo de card para hover */
+  --bs-btn-hover-border-color: var(--border-color);
+}
+/* Botão ativo */
+body.dark-theme .filter-quick-buttons .btn-check:checked + .btn-outline-primary { color: #fff !important; background-color: var(--primary-accent) !important; border-color: var(--primary-accent) !important; }
+body.dark-theme .filter-quick-buttons .btn-check:checked + .btn-outline-warning { color: var(--bs-dark) !important; background-color: var(--bs-warning) !important; border-color: var(--bs-warning) !important;}
+body.dark-theme .filter-quick-buttons .btn-check:checked + .btn-outline-info { color: var(--bs-dark) !important; background-color: var(--bs-info) !important; border-color: var(--bs-info) !important;}
+
+
+/* Filtros avançados colapsáveis */
+.collapse#filtrosAvancadosLista .card-body {
+    background-color: var(--bs-secondary-bg) !important; /* Fundo claro/escuro via variável BS */
+    border-bottom-color: var(--border-color) !important;
+}
+
+/* Tabela Lista de Casos */
+.case-list-table {
+   border-collapse: separate;
+   border-spacing: 0;
+   /* Remove borda superior que bootstrap pode adicionar em table-responsive */
+   border-top: none !important;
+}
+.case-list-table thead {
+  background-color: var(--table-header-bg); /* Usa variável agora */
+  color: var(--table-header-color);
+  font-size: 0.78rem; /* Um pouco menor */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  border-bottom: 2px solid var(--border-color);
+  vertical-align: middle; /* Alinha cabeçalho */
+}
+.case-list-table th, .case-list-table td {
+  padding: 0.9rem 1.1rem; /* Ajusta padding da tabela */
+  vertical-align: middle;
+  white-space: nowrap;
+  border: none; /* Remove todas bordas default das celulas */
+}
+/* Adiciona borda apenas embaixo das linhas do corpo */
+.case-list-table tbody tr {
+  background-color: var(--bs-table-bg); /* Fundo da linha via var */
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition-base);
+}
+.case-list-table tbody tr:last-child {
+  border-bottom: none; /* Remove borda da última linha */
+}
+.case-list-table tbody tr:hover {
+  background-color: var(--bs-table-hover-bg); /* Hover via var */
+  cursor: pointer;
+}
+/* Estilo da coluna # Processo */
+.case-list-table .case-number a {
+   color: var(--primary-accent); /* Azul acinzentado */
+   font-weight: 600;
+}
+.case-list-table .case-number a:hover { text-decoration: underline; }
+
+/* Estilo Célula Prazo Crítico */
+.case-list-table .deadline-cell.critical {
+  color: var(--danger);
+  font-weight: 700;
+  font-size: 0.9em;
+}
+body.dark-theme .case-list-table .deadline-cell.critical { color: #ff7b87 !important; }
+
+/* Estilo Badge de Status na Tabela */
+.case-list-table .case-status {
+   font-size: 0.75rem; font-weight: 600; padding: 0.35em 0.7em;
+   border-radius: 10px; /* Badge mais redondo */
+}
+/* Adaptações cores badges tema dark (mais explícito) */
+body.dark-theme .case-status.status-danger { background-color: rgba(220, 53, 69, 0.8) !important; color: #fff !important; border: 1px solid var(--danger); }
+body.dark-theme .case-status.status-success { background-color: rgba(25, 135, 84, 0.8) !important; color: #fff !important; border: 1px solid var(--success); }
+body.dark-theme .case-status.status-info { background-color: rgba(13, 202, 240, 0.8) !important; color: #000 !important; border: 1px solid var(--info); }
+body.dark-theme .case-status.status-secondary { background-color: rgba(108, 117, 125, 0.8) !important; color: #fff !important; border: 1px solid var(--secondary); }
+body.dark-theme .case-status.status-warning { background-color: rgba(255, 193, 7, 0.8) !important; color: #000 !important; border: 1px solid var(--warning); }
+
+/* Estilo Badge de Origem */
+.case-list-table .case-origin {
+   display: inline-block; font-size: 0.75rem; padding: 0.2em 0.5em;
+   color: var(--muted-text); background-color: var(--bs-secondary-bg);
+   border: 1px solid var(--bs-border-color); border-radius: 4px;
+}
+
+/* Estilo Ícone Risco IA */
+.case-list-table .risk-cell i { transition: transform 0.15s ease-in-out; }
+.case-list-table .risk-cell:hover i { transform: scale(1.4); } /* Aumenta ícone no hover da célula */
+/* Cores tema dark mantidas */
+body.dark-theme .risk-danger { color: #ff7b87 !important; }
+body.dark-theme .risk-warning { color: #ffd166 !important; }
+body.dark-theme .risk-success { color: #60cd93 !important; }
+
+
+/* Botão Ações na Tabela */
+.actions-cell .btn-icon {
+  color: var(--muted-text); background-color: transparent; border: none;
+  padding: 0.25rem 0.5rem; opacity: 0.6; /* Começa mais sutil */
+  transition: var(--transition-base);
+}
+.case-list-table tbody tr:hover .actions-cell .btn-icon {
+    opacity: 1; /* Mostra completamente no hover da linha */
+}
+.actions-cell .btn-icon:hover {
+  color: var(--text-color); background-color: var(--bs-secondary-bg); opacity: 1;
+}
+
+/* Footer da Lista de Casos */
+.case-list-footer {
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    border-bottom-left-radius: var(--card-border-radius);
+    border-bottom-right-radius: var(--card-border-radius);
+    color: var(--muted-text);
+    padding: 0.75rem 1.5rem; /* Padding igual ao header */
+    transition: var(--transition-base);
+    font-size: 0.85rem;
+}
+
+
+/* === Outros Ajustes Finos === */
+/* Mantidos: .badge, .btn, .btn-sm, .btn-outline-*, .fs-tiny */
+.badge { font-weight: 500; padding: 0.45em 0.75em; border-radius: 6px;}
+.btn { transition: var(--transition-base); border-radius: 6px; font-weight: 500;}
+.btn-sm { padding: 0.35rem 0.8rem; font-size: 0.85rem; }
+body.dark-theme .btn-outline-primary { --bs-btn-color: var(--link-color); --bs-btn-border-color: var(--link-color); --bs-btn-hover-bg: var(--link-color); --bs-btn-hover-border-color: var(--link-color); --bs-btn-hover-color: var(--navbar-bg); }
+body.dark-theme .btn-outline-secondary { --bs-btn-color: var(--muted-text); --bs-btn-border-color: var(--border-color); --bs-btn-hover-bg: var(--secondary); --bs-btn-hover-border-color: var(--secondary); --bs-btn-hover-color: #fff; }
+
+.fs-tiny { font-size: 0.6rem; vertical-align: middle; }
+
+/* Corrige link imperativo dark */
+body.dark-theme .widget-imperatives .list-group-item a { color: var(--text-color);}
+
+/* === NOVOS ESTILOS TIMELINE WIDGET === */
+
+.timeline-widget .card-body {
+  padding: 1rem 1.5rem; /* Ajusta padding interno */
+}
+
+.timeline-list {
+  position: relative;
+  padding-left: 20px; /* Espaço para a linha vertical */
+}
+
+/* Linha Vertical da Timeline */
+.timeline-list::before {
+  content: '';
+  position: absolute;
+  left: 25px; /* Alinhado com o centro do ícone */
+  top: 5px;
+  bottom: 5px;
+  width: 2px;
+  background-color: var(--border-color);
+   /* Adaptação Dark */
+   body.dark-theme & {
+       background-color: var(--border-color);
+   }
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 45px; /* Espaço ícone + linha + espaçamento */
+  padding-bottom: 1.5rem;
+}
+.timeline-item:last-child {
+  padding-bottom: 0.5rem;
+}
+
+.timeline-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50px; /* Largura para centralizar ícone e linha */
+  height: 50px; /* Garante espaço vertical */
   display: flex;
-  flex-direction: column;
+  justify-content: center; /* Centraliza horizontalmente */
+  padding-top: 3px; /* Ajuste fino vertical */
+}
+
+.timeline-icon i {
+  font-size: 1.1rem;
+  color: var(--muted-text);
+  background-color: var(--body-bg); /* Fundo igual ao body para cortar a linha */
+  padding: 6px; /* Cria espaço ao redor do ícone */
+  border-radius: 50%;
+  z-index: 1;
+   border: 1px solid var(--border-color); /* Borda sutil no icone */
+   /* Adaptação Dark */
+    body.dark-theme & {
+      background-color: var(--body-bg);
+       color: var(--muted-text);
+       border-color: var(--border-color);
+   }
+}
+/* Ícone do item atual/recente */
+.timeline-item.current .timeline-icon i {
+  color: var(--primary-accent);
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.2); /* Efeito glow */
+    /* Adaptação Dark */
+    body.dark-theme & {
+        color: var(--primary-accent);
+        border-color: var(--primary-accent);
+    }
+}
+/* Ícone do item crítico */
+.timeline-item.critical .timeline-icon i {
+  color: var(--danger);
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(var(--bs-danger-rgb), 0.2);
+  /* Adaptação Dark */
+  body.dark-theme & {
+        color: #ff7b87; /* Vermelho claro */
+        border-color: #ff7b87;
+   }
+}
+
+
+.timeline-content {
+  position: relative;
+}
+
+.timeline-date {
+  font-size: 0.75rem;
+  color: var(--muted-text);
+  display: block;
+  margin-bottom: 0.2rem;
+  font-weight: 500;
+}
+/* Data crítica */
+.timeline-item.critical .timeline-date {
+   color: var(--danger);
+   font-weight: 700;
+    /* Adaptação Dark */
+   body.dark-theme & { color: #ff7b87 !important; }
+}
+
+.timeline-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: var(--text-color);
+}
+
+.timeline-description {
+  font-size: 0.85rem;
+  color: var(--muted-text);
+  margin-bottom: 0;
+}
+
+
+/* === Ajuste Widget Insights === */
+.insights-widget .card-header { /* Título ligeiramente diferente talvez */
+   background-color: var(--bs-secondary-bg);
+}
+.insights-widget .display-6 { /* Ajusta tamanho probabilidade */
+   font-size: 2.5rem;
+}
+.insights-widget .small {
+   font-size: 0.8rem;
+}
+
+/* === Fix for CaseDetailHeader in dark theme === */
+.card-body.bg-secondary-subtle {
+  background-color: var(--bs-secondary-bg) !important;
+  color: var(--text-color);
+  transition: var(--transition-base);
+}
+
+body.dark-theme .card-body.bg-secondary-subtle {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark-theme .card-body.bg-secondary-subtle strong.text-muted,
+body.dark-theme .card-header strong.text-muted,
+body.dark-theme .card-body.bg-secondary-subtle .text-muted {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Correções de Contraste para Ambos os Temas */
+/* Correção para badges de status */
+.badge.status-danger {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: var(--bs-danger);
+  border: 1px solid var(--bs-danger);
+}
+
+.badge.status-success {
+  background-color: rgba(25, 135, 84, 0.2);
+  color: var(--bs-success);
+  border: 1px solid var(--bs-success);
+}
+
+.badge.status-info {
+  background-color: rgba(13, 202, 240, 0.2);
+  color: var(--bs-info);
+  border: 1px solid var(--bs-info);
+}
+
+.badge.status-secondary {
+  background-color: rgba(108, 117, 125, 0.2);
+  color: var(--bs-secondary);
+  border: 1px solid var(--bs-secondary);
+}
+
+.badge.status-warning {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #664d03;
+  border: 1px solid var(--bs-warning);
+}
+
+/* Correções específicas para tema escuro */
+body.dark-theme .badge.status-danger {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: #ff7b87;
+  border: 1px solid #ff7b87;
+}
+
+body.dark-theme .badge.status-success {
+  background-color: rgba(25, 135, 84, 0.2);
+  color: #60cd93;
+  border: 1px solid #60cd93;
+}
+
+body.dark-theme .badge.status-info {
+  background-color: rgba(13, 202, 240, 0.2);
+  color: #6edff6;
+  border: 1px solid #6edff6;
+}
+
+body.dark-theme .badge.status-secondary {
+  background-color: rgba(108, 117, 125, 0.2);
+  color: #c6c9cc;
+  border: 1px solid #c6c9cc;
+}
+
+body.dark-theme .badge.status-warning {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ffd166;
+  border: 1px solid #ffd166;
+}
+
+/* Correções para texto muted em diferentes contextos */
+body.dark-theme .text-muted {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+body.dark-theme .card-header .text-muted,
+body.dark-theme .card-body .text-muted {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Correção para links em diferentes contextos */
+body.dark-theme a:not(.btn):not(.nav-link):not(.dropdown-item) {
+  color: var(--link-color);
+}
+
+body.dark-theme a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
+  color: var(--link-hover-color);
+}
+
+/* Correção para botões outline no tema escuro */
+body.dark-theme .btn-outline-primary {
+  --bs-btn-color: var(--link-color);
+  --bs-btn-border-color: var(--link-color);
+  --bs-btn-hover-bg: var(--link-color);
+  --bs-btn-hover-border-color: var(--link-color);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-bg: var(--link-color);
+  --bs-btn-active-border-color: var(--link-color);
+  --bs-btn-active-color: #fff;
+}
+
+body.dark-theme .btn-outline-secondary {
+  --bs-btn-color: var(--muted-text);
+  --bs-btn-border-color: var(--border-color);
+  --bs-btn-hover-bg: rgba(255, 255, 255, 0.1);
+  --bs-btn-hover-border-color: var(--border-color);
+  --bs-btn-hover-color: var(--text-color);
+  --bs-btn-active-bg: rgba(255, 255, 255, 0.15);
+  --bs-btn-active-border-color: var(--border-color);
+  --bs-btn-active-color: var(--text-color);
+}
+
+/* Correção para formulários no tema escuro */
+body.dark-theme .form-control,
+body.dark-theme .form-select {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+body.dark-theme .form-control:focus,
+body.dark-theme .form-select:focus {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 0.25rem rgba(106, 141, 177, 0.25);
+}
+
+body.dark-theme .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Correção para tabelas no tema escuro */
+body.dark-theme .table {
+  --bs-table-color: var(--text-color);
+  --bs-table-bg: var(--card-bg);
+  --bs-table-border-color: var(--border-color);
+}
+
+body.dark-theme .table-hover tbody tr:hover {
+  --bs-table-hover-bg: rgba(255, 255, 255, 0.05);
+  --bs-table-hover-color: var(--text-color);
+}
+
+/* Correção para dropdown menus no tema escuro */
+body.dark-theme .dropdown-menu {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+body.dark-theme .dropdown-item {
+  color: var(--text-color);
+}
+
+body.dark-theme .dropdown-item:hover,
+body.dark-theme .dropdown-item:focus {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+}
+
+body.dark-theme .dropdown-divider {
+  border-top-color: var(--border-color);
+}
+
+/* Correção para indicadores de risco no tema escuro */
+body.dark-theme .risk-danger { color: #ff7b87 !important; }
+body.dark-theme .risk-warning { color: #ffd166 !important; }
+body.dark-theme .risk-success { color: #60cd93 !important; }
+body.dark-theme .risk-info { color: #6edff6 !important; }
+body.dark-theme .risk-secondary { color: #c6c9cc !important; }
+
+/* Correção para paginação no tema escuro */
+body.dark-theme .pagination {
+  --bs-pagination-color: var(--text-color);
+  --bs-pagination-bg: var(--card-bg);
+  --bs-pagination-border-color: var(--border-color);
+  --bs-pagination-hover-color: var(--link-hover-color);
+  --bs-pagination-hover-bg: var(--bs-secondary-bg);
+  --bs-pagination-hover-border-color: var(--border-color);
+  --bs-pagination-active-color: #fff;
+  --bs-pagination-active-bg: var(--primary-accent);
+  --bs-pagination-active-border-color: var(--primary-accent);
+  --bs-pagination-disabled-color: var(--muted-text);
+  --bs-pagination-disabled-bg: var(--card-bg);
+  --bs-pagination-disabled-border-color: var(--border-color);
+}
+
+/* Ajustes para a logo na navbar */
+.navbar-brand img {
+  height: 40px;
+  max-height: 40px;
+  transition: var(--transition-base);
+  vertical-align: middle;
+}
+
+/* Ajuste responsivo para telas menores */
+@media (max-width: 576px) {
+  .navbar-brand img {
+    height: 35px;
+    max-height: 35px;
+  }
+}
+
+body.dark-theme .card-body.bg-secondary-subtle {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark-theme .card-body.bg-secondary-subtle strong.text-muted,
+body.dark-theme .card-header strong.text-muted,
+body.dark-theme .card-body.bg-secondary-subtle .text-muted {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Fix for status badges in both themes */
+.badge.status-info {
+  background-color: rgba(13, 202, 240, 0.2);
+  color: var(--bs-info);
+  border: 1px solid var(--bs-info);
+}
+
+body.dark-theme .badge.status-info {
+  background-color: rgba(13, 202, 240, 0.2);
+  color: #6edff6;
+  border: 1px solid #6edff6;
+}
+
+/* Fix for insights widget in dark theme */
+.insights-widget .card-body {
+  color: var(--text-color);
+}
+
+.insights-widget ul li {
+  margin-bottom: 0.5rem;
+}
+
+/* Ajustes para a logo na navbar */
+.navbar-brand img {
+  height: 40px;
+  max-height: 40px;
+  transition: var(--transition-base);
+  vertical-align: middle;
+}
+
+/* Ajuste responsivo para telas menores */
+@media (max-width: 576px) {
+  .navbar-brand img {
+    height: 35px;
+    max-height: 35px;
+  }
+}
+
+body.dark-theme .card-body.bg-secondary-subtle {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark-theme .card-body.bg-secondary-subtle strong.text-muted,
+body.dark-theme .card-header strong.text-muted,
+body.dark-theme .card-body.bg-secondary-subtle .text-muted {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Fix for status badges in both themes */
+.badge.status-info {
+  background-color: rgba(13, 202, 240, 0.2);
+  color: var(--bs-info);
+  border: 1px solid var(--bs-info);
+}
+
+body.dark-theme .badge.status-info {
+  background-color: rgba(13, 202, 240, 0.2);
+  color: #6edff6;
+  border: 1px solid #6edff6;
+}
+
+/* Fix for insights widget in dark theme */
+.insights-widget .card-body {
+  color: var(--text-color);
+}
+
+.insights-widget ul li {
+  margin-bottom: 0.5rem;
+}
+
+/* === Logo Styling === */
+.logo-watermark {
+  bottom: 20px;
+  right: 20px;
+  z-index: 0;
+  opacity: 0.07;
+  transform: rotate(-5deg);
+}
+
+.opacity-05 {
+  opacity: 0.05;
+}
+
+/* Card footer com logo */
+.card-footer-branded {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+}
+
+.card-footer-branded img {
+  height: 24px;
+  opacity: 0.7;
+  transition: var(--transition-base);
+}
+
+.card-footer-branded:hover img {
+  opacity: 1;
+}
+
+/* Logo no sidebar */
+.sidebar-logo {
+  padding: 1.5rem;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-bottom: 1rem;
 }
 
-.App-link {
-  color: #61dafb;
+.sidebar-logo img {
+  height: 40px;
+  opacity: 0.8;
+  transition: var(--transition-base);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.sidebar-logo:hover img {
+  opacity: 1;
+}
+
+
+/* ... existing code ... */
+
+/* === MELHORIAS DE RESPONSIVIDADE MOBILE === */
+
+/* Ajustes gerais para mobile */
+@media (max-width: 767.98px) {
+  :root {
+    --sidebar-width: 100%; /* Sidebar ocupa toda a largura em mobile */
   }
-  to {
-    transform: rotate(360deg);
+  
+  body {
+    font-size: 14px; /* Texto ligeiramente menor em mobile */
+  }
+  
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  .card-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
   }
 }
+
+/* Ajustes para o layout principal */
+@media (max-width: 991.98px) {
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    transition: var(--transition-base);
+  }
+  
+  /* Quando sidebar está aberta */
+  body.sidebar-open .main-content {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  
+  /* Sidebar mobile */
+  .sidebar {
+    left: -100%;
+    width: 85%;
+    max-width: 300px;
+    z-index: 1050;
+    transition: left var(--transition-base);
+  }
+  
+  body.sidebar-open .sidebar {
+    left: 0;
+  }
+  
+  /* Overlay para quando sidebar está aberta */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+  }
+  
+  body.sidebar-open .sidebar-overlay {
+    display: block;
+  }
+}
+
+/* Ajustes para tabelas em mobile */
+@media (max-width: 767.98px) {
+  /* Tabela de casos - versão responsiva */
+  .case-list-table {
+    display: block;
+    width: 100%;
+  }
+  
+  .case-list-table thead {
+    display: none; /* Oculta cabeçalho em mobile */
+  }
+  
+  .case-list-table tbody {
+    display: block;
+    width: 100%;
+  }
+  
+  .case-list-table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-border-radius);
+    padding: 0.75rem;
+    position: relative;
+  }
+  
+  .case-list-table tbody td {
+    display: block;
+    text-align: right;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    position: relative;
+  }
+  
+  /* Adiciona labels para cada célula */
+  .case-list-table tbody td:before {
+    content: attr(data-label);
+    float: left;
+    font-weight: 600;
+    color: var(--muted-text);
+  }
+  
+  /* Ajustes específicos para células */
+  .case-list-table .case-number {
+    font-size: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 0.5rem;
+    text-align: left;
+  }
+  
+  .case-list-table .actions-cell {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    border: none;
+    background: transparent;
+  }
+  
+  .case-list-table .deadline-cell.critical {
+    background-color: rgba(var(--bs-danger-rgb), 0.1);
+    border-radius: var(--card-border-radius);
+  }
+}
+
+/* Ajustes para filtros e toolbar em mobile */
+@media (max-width: 767.98px) {
+  .case-list-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filter-quick-buttons {
+    margin-bottom: 1rem;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 0.5rem;
+  }
+  
+  .filter-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .filter-actions select {
+    max-width: 60%;
+  }
+}
+
+/* Ajustes para widgets do dashboard em mobile */
+@media (max-width: 767.98px) {
+  .snapshot-card {
+    margin-bottom: 1rem;
+  }
+  
+  .timeline-widget .timeline-item {
+    padding-left: 35px;
+  }
+  
+  .timeline-widget .timeline-icon {
+    width: 35px;
+  }
+  
+  .timeline-list::before {
+    left: 17px;
+  }
+  
+  .insights-widget .display-6 {
+    font-size: 2rem;
+  }
+}
+
+/* Ajustes para navbar em mobile */
+@media (max-width: 575.98px) {
+  .navbar .form-control {
+    width: 120px;
+  }
+  
+  .navbar-brand img {
+    height: 32px;
+  }
+  
+  .navbar .nav-link {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Ajustes para detalhes do caso em mobile */
+@media (max-width: 767.98px) {
+  .case-detail-header .row > div {
+    margin-bottom: 1rem;
+  }
+  
+  .case-detail-header h4 {
+    font-size: 1.25rem;
+  }
+  
+  .case-detail-tabs .nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Ajustes para paginação em mobile */
+@media (max-width: 575.98px) {
+  .case-list-footer {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .case-list-footer > div {
+    margin-bottom: 0.5rem;
+  }
+  
+  .pagination .page-link {
+    padding: 0.25rem 0.5rem;
+  }
+}
+
